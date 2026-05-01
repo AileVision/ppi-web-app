@@ -14,29 +14,8 @@ import { Link, usePage } from '@inertiajs/react';
 import { BookOpen, Folder, LayoutGrid, Menu, Search } from 'lucide-react';
 import AppLogo from './app-logo';
 import AppLogoIcon from './app-logo-icon';
-
-const mainNavItems: NavItem[] = [
-    {
-        title: 'Dashboard',
-        url: '/dashboard',
-        icon: LayoutGrid,
-    },
-];
-
-const rightNavItems: NavItem[] = [
-    {
-        title: 'Repository',
-        url: 'https://github.com/laravel/react-starter-kit',
-        icon: Folder,
-    },
-    {
-        title: 'Documentation',
-        url: 'https://laravel.com/docs/starter-kits',
-        icon: BookOpen,
-    },
-];
-
-const activeItemStyles = 'text-neutral-900 dark:bg-neutral-800 dark:text-neutral-100';
+import useLang from '@/hooks/useLang';
+import { HeartHandshake, FolderHeart, Landmark, UsersRound, Tags } from 'lucide-react';
 
 interface AppHeaderProps {
     breadcrumbs?: BreadcrumbItem[];
@@ -45,7 +24,37 @@ interface AppHeaderProps {
 export function AppHeader({ breadcrumbs = [] }: AppHeaderProps) {
     const page = usePage<SharedData>();
     const { auth } = page.props;
-    const getInitials = useInitials();
+    const { auth, localesUrls } = page.props;
+    const getInitials = useInitials(); // <-- Ajout de localesUrls
+    const { t, locale } = useLang(); // <-- Ajout du hook
+
+
+    const mainNavItems: NavItem[] = [
+        {
+            title: 'Dashboard',
+            url: '/dashboard',
+            icon: LayoutGrid,
+        },
+        { title: t('Dashboard'), url: '/admin/dashboard', icon: LayoutGrid },
+        { title: t('Projects'), url: '/admin/projects', icon: FolderHeart },
+        { title: t('Beneficiaries'), url: '/admin/beneficiaries', icon: HeartHandshake },
+    ];
+
+    const rightNavItems: NavItem[] = [
+        {
+            title: 'Repository',
+            url: 'https://github.com/laravel/react-starter-kit',
+            icon: Folder,
+        },
+        {
+            title: 'Documentation',
+            url: 'https://laravel.com/docs/starter-kits',
+            icon: BookOpen,
+        },
+    ];
+
+    const activeItemStyles = 'text-neutral-900 dark:bg-neutral-800 dark:text-neutral-100';
+
     return (
         <>
             <div className="border-sidebar-border/80 border-b">
@@ -124,7 +133,21 @@ export function AppHeader({ breadcrumbs = [] }: AppHeaderProps) {
                         </NavigationMenu>
                     </div>
 
-                    <div className="ml-auto flex items-center space-x-2">
+                    <div className="ml-auto flex items-center space-x-4">
+                        {/* SÉLECTEUR DE LANGUE AJOUTÉ ICI */}
+                        {localesUrls && (
+                            <div className="flex bg-neutral-100 dark:bg-neutral-800 rounded-md p-1 items-center">
+                                <a href={localesUrls.en} 
+                                   className={`px-2 py-1 text-xs rounded font-medium transition-colors ${locale === 'en' ? 'bg-white shadow-sm text-black dark:bg-neutral-700 dark:text-white' : 'text-neutral-500 hover:text-neutral-700 dark:hover:text-neutral-300'}`}>
+                                    EN
+                                </a>
+                                <a href={localesUrls.fr} 
+                                   className={`px-2 py-1 text-xs rounded font-medium transition-colors ${locale === 'fr' ? 'bg-white shadow-sm text-black dark:bg-neutral-700 dark:text-white' : 'text-neutral-500 hover:text-neutral-700 dark:hover:text-neutral-300'}`}>
+                                    FR
+                                </a>
+                            </div>
+                        )}
+                        
                         <div className="relative flex items-center space-x-1">
                             <Button variant="ghost" size="icon" className="group h-9 w-9 cursor-pointer">
                                 <Search className="!size-5 opacity-80 group-hover:opacity-100" />

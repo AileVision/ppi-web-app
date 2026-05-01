@@ -1,7 +1,7 @@
 import { LucideIcon } from 'lucide-react';
 
 export interface Auth {
-    user: User;
+    user: User | null;
 }
 
 export interface BreadcrumbItem {
@@ -25,6 +25,12 @@ export interface SharedData {
     name: string;
     quote: { message: string; author: string };
     auth: Auth;
+    locale: string;
+    translations: Record<string, string>;
+    localesUrls: {
+        fr: string;
+        en: string;
+    };
     [key: string]: unknown;
 }
 
@@ -36,5 +42,7 @@ export interface User {
     email_verified_at: string | null;
     created_at: string;
     updated_at: string;
-    [key: string]: unknown; // This allows for additional properties...
+    roles?: string[];
+    permissions?: string[];
+    [key: string]: unknown;
 }
