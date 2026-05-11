@@ -1,10 +1,10 @@
 import React from 'react';
-import { Head, Link } from '@inertiajs/react';
+import { Head, Link, router } from '@inertiajs/react';
 import AppLayout from '@/layouts/app-layout';
 import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import Heading from '@/components/heading';
-import { Edit, AlertCircle, CheckCircle2 } from 'lucide-react';
+import { Edit, Trash2, AlertCircle, CheckCircle2 } from 'lucide-react';
 import useLang from '@/hooks/useLang';
 
 interface CategoryListItem {
@@ -21,6 +21,12 @@ export default function AdminCategoriesIndex({ categories }: { categories: Categ
         { title: 'Categories', href: '/admin/categories' },
     ];
 
+    const handleDelete = (id: number) => {
+        if (confirm('Are you sure you want to delete this category?')) {
+            router.delete(route('admin.categories.destroy', id));
+        }
+    };
+
     // Fonction pour vérifier si la catégorie a un compte bancaire valide (exigence TdR)
     const isBankConfigured = (bank: any) => {
         return bank && bank.account_name && bank.account_name !== 'À définir' && bank.account_number !== 'À définir';
@@ -30,11 +36,16 @@ export default function AdminCategoriesIndex({ categories }: { categories: Categ
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Manage Categories" />
             
-            <div className="flex justify-between items-center mb-6">
+            <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between mb-6">
                 <Heading 
                     title="Vulnerable Categories" 
                     description="Manage the 3 default categories and their specific bank accounts." 
                 />
+                <Button asChild className="self-start bg-blue-600 hover:bg-blue-700">
+                    <Link href={route('admin.categories.create')}>
+                        Add Category
+                    </Link>
+                </Button>
             </div>
 
             <div className="bg-white rounded-md border shadow-sm">
@@ -67,11 +78,14 @@ export default function AdminCategoriesIndex({ categories }: { categories: Categ
                                         </span>
                                     )}
                                 </TableCell>
-                                <TableCell className="text-right">
+                                <TableCell className="text-right flex justify-end gap-2">
                                     <Button variant="outline" size="sm" asChild>
                                         <Link href={route('admin.categories.edit', category.id)}>
-                                            <Edit className="h-4 w-4 mr-2 text-blue-600" /> Edit Bank Info
+                                            <Edit className="h-4 w-4 mr-2 text-blue-600" /> Edit
                                         </Link>
+                                    </Button>
+                                    <Button variant="outline" size="sm" onClick={() => handleDelete(category.id)}>
+                                        <Trash2 className="h-4 w-4 text-red-600" />
                                     </Button>
                                 </TableCell>
                             </TableRow>

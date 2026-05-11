@@ -3,9 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreProjectRequest;
+use App\Http\Requests\UpdateProjectRequest;
 use App\Models\Project;
 use App\Models\Sector;
-use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
@@ -41,36 +42,9 @@ class ProjectController extends Controller
     }
 
 
-    public function store(Request $request)
+    public function store(StoreProjectRequest $request)
     {
-        // 1. Validation
-        $validated = $request->validate([
-            // ... (garde tes validations précédentes pour title, location, etc.)
-            'title.fr' => 'required|string|max:255',
-            'title.en' => 'required|string|max:255',
-            'location.fr' => 'required|string',
-            'location.en' => 'required|string',
-            'context.fr' => 'required|string',
-            'context.en' => 'required|string',
-            'activities.fr' => 'required|string',
-            'activities.en' => 'required|string',
-            'expected_results.fr' => 'required|string',
-            'expected_results.en' => 'required|string',
-            'sector_ids' => 'required|array',
-            'main_image' => 'required|image|mimes:jpeg,png,jpg,webp|max:2048',
-            
-            // Validation de la Galerie (Jusqu'à 21 images)
-            'gallery' => 'nullable|array|max:21',
-            'gallery.*' => 'image|mimes:jpeg,png,jpg,webp|max:2048', // Chaque image max 2Mo
-
-            // Infos bancaires
-            'bank_account.account_name' => 'required|string',
-            'bank_account.account_number' => 'required|string',
-            'bank_account.bank_name' => 'required|string',
-            'bank_account.iban' => 'nullable|string',
-            'bank_account.swift' => 'nullable|string',
-            'bank_account.country' => 'required|string',
-        ]);
+        $validated = $request->validated();
 
         // 2. Upload de l'image principale
         $mainImagePath = $request->file('main_image')->store('projects', 'public');
@@ -136,29 +110,9 @@ class ProjectController extends Controller
     /**
      * Met à jour le projet en base de données
      */
-    public function update(Request $request, Project $project)
+    public function update(UpdateProjectRequest $request, Project $project)
     {
-        // Validation similaire au store() (sauf main_image qui devient nullable)
-        $validated = $request->validate([
-            'title.fr' => 'required|string|max:255',
-            'title.en' => 'required|string|max:255',
-            'location.fr' => 'required|string',
-            'location.en' => 'required|string',
-            'context.fr' => 'required|string',
-            'context.en' => 'required|string',
-            'activities.fr' => 'required|string',
-            'activities.en' => 'required|string',
-            'expected_results.fr' => 'required|string',
-            'expected_results.en' => 'required|string',
-            'sector_ids' => 'required|array',
-            'main_image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048', // Nullable !
-            'bank_account.account_name' => 'required|string',
-            'bank_account.account_number' => 'required|string',
-            'bank_account.bank_name' => 'required|string',
-            'bank_account.iban' => 'nullable|string',
-            'bank_account.swift' => 'nullable|string',
-            'bank_account.country' => 'required|string',
-        ]);
+        $validated = $request->validated();
 
         // Mise à jour de l'image principale SEULEMENT si une nouvelle est fournie
         if ($request->hasFile('main_image')) {

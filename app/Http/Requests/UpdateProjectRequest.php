@@ -12,7 +12,7 @@ class UpdateProjectRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -23,7 +23,25 @@ class UpdateProjectRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'title.fr' => ['required', 'string', 'max:255'],
+            'title.en' => ['required', 'string', 'max:255'],
+            'location.fr' => ['required', 'string'],
+            'location.en' => ['required', 'string'],
+            'context.fr' => ['required', 'string'],
+            'context.en' => ['required', 'string'],
+            'activities.fr' => ['required', 'string'],
+            'activities.en' => ['required', 'string'],
+            'expected_results.fr' => ['required', 'string'],
+            'expected_results.en' => ['required', 'string'],
+            'sector_ids' => ['required', 'array'],
+            'sector_ids.*' => ['integer', 'exists:sectors,id'],
+            'main_image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,webp', 'max:2048'],
+            'bank_account.account_name' => ['required', 'string'],
+            'bank_account.account_number' => ['required', 'string'],
+            'bank_account.bank_name' => ['required', 'string'],
+            'bank_account.iban' => ['nullable', 'string'],
+            'bank_account.swift' => ['nullable', 'string'],
+            'bank_account.country' => ['required', 'string'],
         ];
     }
 }

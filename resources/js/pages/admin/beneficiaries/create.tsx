@@ -6,6 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import Heading from '@/components/heading';
+import { getFieldError } from '@/utils/validation';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import useLang from '@/hooks/useLang';
@@ -130,12 +131,12 @@ export default function CreateBeneficiary({ categories }: CreateBeneficiaryProps
                             <div className="space-y-2">
                                 <Label>Situation (English) *</Label>
                                 <Textarea required rows={6} value={data.situation.en} onChange={e => handleTranslatableChange('situation', 'en', e.target.value)} />
-                                {errors['situation.en'] && <p className="text-red-500 text-sm">{errors['situation.en']}</p>}
+                                {getFieldError(errors, 'situation.en') && <p className="text-red-500 text-sm">{getFieldError(errors, 'situation.en')}</p>}
                             </div>
                             <div className="space-y-2">
                                 <Label>Situation (Français) *</Label>
                                 <Textarea required rows={6} value={data.situation.fr} onChange={e => handleTranslatableChange('situation', 'fr', e.target.value)} />
-                                {errors['situation.fr'] && <p className="text-red-500 text-sm">{errors['situation.fr']}</p>}
+                                {getFieldError(errors, 'situation.fr') && <p className="text-red-500 text-sm">{getFieldError(errors, 'situation.fr')}</p>}
                             </div>
                         </div>
 

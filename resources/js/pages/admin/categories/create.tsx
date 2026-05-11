@@ -8,43 +8,28 @@ import Heading from '@/components/heading';
 import { getFieldError } from '@/utils/validation';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 
-interface EditCategoryProps {
-    category: {
-        id: number;
-        name: Record<string, string>;
-        bank_account: {
-            account_name: string;
-            account_number: string;
-            bank_name: string;
-            iban: string | null;
-            swift: string | null;
-            country: string;
-        } | null;
-    };
-}
-
-export default function EditCategory({ category }: EditCategoryProps) {
-    const breadcrumbs =[
+export default function CreateCategory() {
+    const breadcrumbs = [
         { title: 'Dashboard', href: '/admin/dashboard' },
         { title: 'Categories', href: '/admin/categories' },
-        { title: 'Edit', href: `/admin/categories/${category.id}/edit` },
+        { title: 'Create', href: '/admin/categories/create' },
     ];
 
-    const { data, setData, put, processing, errors } = useForm({
-        name: category.name,
-        bank_account: category.bank_account || {
+    const { data, setData, post, processing, errors } = useForm({
+        name: { fr: '', en: '' },
+        bank_account: {
             account_name: '',
             account_number: '',
             bank_name: '',
             iban: '',
             swift: '',
-            country: 'Togo'
-        }
+            country: 'Togo',
+        },
     });
 
     const submit = (e: React.FormEvent) => {
         e.preventDefault();
-        put(route('admin.categories.update', category.id));
+        post(route('admin.categories.store'));
     };
 
     const handleTranslatableChange = (lang: 'fr' | 'en', value: string) => {
@@ -53,19 +38,15 @@ export default function EditCategory({ category }: EditCategoryProps) {
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title="Edit Category" />
-            
-            <Heading 
-                title="Edit Category & Bank Information" 
-                description="Manage the bank account details linked to this specific category of vulnerable people." 
-            />
+            <Head title="Create Category" />
+
+            <Heading title="Create Category" description="Add a new vulnerable category and its bank information." />
 
             <form onSubmit={submit} className="space-y-8 pb-10">
-                {/* NOM DE LA CATÉGORIE */}
                 <Card>
                     <CardHeader>
                         <CardTitle>Category Name</CardTitle>
-                        <CardDescription>The 3 categories are fixed, but you can adjust their translations.</CardDescription>
+                        <CardDescription>Enter the category labels in English and French.</CardDescription>
                     </CardHeader>
                     <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
@@ -81,47 +62,47 @@ export default function EditCategory({ category }: EditCategoryProps) {
                     </CardContent>
                 </Card>
 
-                {/* INFORMATIONS BANCAIRES (Cœur du TdR) */}
                 <Card className="border-emerald-200 shadow-sm">
                     <CardHeader className="bg-emerald-50/50 border-b border-emerald-100">
                         <CardTitle className="text-emerald-800">Bank Account Information</CardTitle>
                         <CardDescription className="text-emerald-700">
-                            Donations made to this category will be directed to this bank account.
+                            Donations directed to this category will use the following account.
                         </CardDescription>
                     </CardHeader>
                     <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-6">
                         <div>
-                            <Label>Account Name *</Label>
-                            <Input required value={data.bank_account.account_name} onChange={e => setData('bank_account', {...data.bank_account, account_name: e.target.value})} />
-                            {getFieldError(errors, 'bank_account.account_name') && <p className="text-red-500 text-sm mt-1">{getFieldError(errors, 'bank_account.account_name')}</p>}
+                            <Label>Account Name</Label>
+                            <Input value={data.bank_account.account_name} onChange={e => setData('bank_account', { ...data.bank_account, account_name: e.target.value })} />
                         </div>
                         <div>
-                            <Label>Bank Name *</Label>
-                            <Input required value={data.bank_account.bank_name} onChange={e => setData('bank_account', {...data.bank_account, bank_name: e.target.value})} />
+                            <Label>Bank Name</Label>
+                            <Input value={data.bank_account.bank_name} onChange={e => setData('bank_account', { ...data.bank_account, bank_name: e.target.value })} />
                         </div>
                         <div>
-                            <Label>Account Number *</Label>
-                            <Input required value={data.bank_account.account_number} onChange={e => setData('bank_account', {...data.bank_account, account_number: e.target.value})} />
+                            <Label>Account Number</Label>
+                            <Input value={data.bank_account.account_number} onChange={e => setData('bank_account', { ...data.bank_account, account_number: e.target.value })} />
                         </div>
                         <div>
-                            <Label>Country *</Label>
-                            <Input required value={data.bank_account.country} onChange={e => setData('bank_account', {...data.bank_account, country: e.target.value})} />
+                            <Label>Country</Label>
+                            <Input value={data.bank_account.country} onChange={e => setData('bank_account', { ...data.bank_account, country: e.target.value })} />
                         </div>
                         <div>
                             <Label>IBAN</Label>
-                            <Input value={data.bank_account.iban || ''} onChange={e => setData('bank_account', {...data.bank_account, iban: e.target.value})} />
+                            <Input value={data.bank_account.iban} onChange={e => setData('bank_account', { ...data.bank_account, iban: e.target.value })} />
                         </div>
                         <div>
                             <Label>SWIFT / BIC</Label>
-                            <Input value={data.bank_account.swift || ''} onChange={e => setData('bank_account', {...data.bank_account, swift: e.target.value})} />
+                            <Input value={data.bank_account.swift} onChange={e => setData('bank_account', { ...data.bank_account, swift: e.target.value })} />
                         </div>
                     </CardContent>
                 </Card>
 
                 <div className="flex justify-end gap-4">
-                    <Button type="button" variant="outline" onClick={() => window.history.back()}>Cancel</Button>
-                    <Button type="submit" className="bg-emerald-600 hover:bg-emerald-700" disabled={processing}>
-                        {processing ? 'Saving...' : 'Save Category'}
+                    <Button type="button" variant="outline" onClick={() => window.history.back()}>
+                        Cancel
+                    </Button>
+                    <Button type="submit" className="bg-blue-600 hover:bg-blue-700" disabled={processing}>
+                        {processing ? 'Saving...' : 'Create Category'}
                     </Button>
                 </div>
             </form>

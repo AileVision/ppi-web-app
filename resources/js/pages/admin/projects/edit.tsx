@@ -6,6 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import Heading from '@/components/heading';
+import { getFieldError } from '@/utils/validation';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
 import { X } from 'lucide-react';
@@ -236,12 +237,12 @@ export default function EditProject({ sectors, project }: EditProps) {
                             <div>
                                 <Label>Title (English) *</Label>
                                 <Input required value={data.title.en} onChange={e => handleTranslatableChange('title', 'en', e.target.value)} />
-                                {errors['title.en'] && <p className="text-red-500 text-sm mt-1">{errors['title.en']}</p>}
+                                {getFieldError(errors, 'title.en') && <p className="text-red-500 text-sm mt-1">{getFieldError(errors, 'title.en')}</p>}
                             </div>
                             <div>
                                 <Label>Titre (Français) *</Label>
                                 <Input required value={data.title.fr} onChange={e => handleTranslatableChange('title', 'fr', e.target.value)} />
-                                {errors['title.fr'] && <p className="text-red-500 text-sm mt-1">{errors['title.fr']}</p>}
+                                {getFieldError(errors, 'title.fr') && <p className="text-red-500 text-sm mt-1">{getFieldError(errors, 'title.fr')}</p>}
                             </div>
                         </div>
 
@@ -395,22 +396,22 @@ export default function EditProject({ sectors, project }: EditProps) {
                         <div>
                             <Label>Account Name *</Label>
                             <Input required placeholder="e.g. PPI - School Project" value={data.bank_account.account_name} onChange={e => setData('bank_account', {...data.bank_account, account_name: e.target.value})} />
-                            {errors['bank_account.account_name'] && <p className="text-red-500 text-sm mt-1">{errors['bank_account.account_name']}</p>}
+                            {getFieldError(errors, 'bank_account.account_name') && <p className="text-red-500 text-sm mt-1">{getFieldError(errors, 'bank_account.account_name')}</p>}
                         </div>
                         <div>
                             <Label>Bank Name *</Label>
                             <Input required placeholder="e.g. Ecobank Togo" value={data.bank_account.bank_name} onChange={e => setData('bank_account', {...data.bank_account, bank_name: e.target.value})} />
-                            {errors['bank_account.bank_name'] && <p className="text-red-500 text-sm mt-1">{errors['bank_account.bank_name']}</p>}
+                            {getFieldError(errors, 'bank_account.bank_name') && <p className="text-red-500 text-sm mt-1">{getFieldError(errors, 'bank_account.bank_name')}</p>}
                         </div>
                         <div>
                             <Label>Account Number *</Label>
                             <Input required value={data.bank_account.account_number} onChange={e => setData('bank_account', {...data.bank_account, account_number: e.target.value})} />
-                            {errors['bank_account.account_number'] && <p className="text-red-500 text-sm mt-1">{errors['bank_account.account_number']}</p>}
+                            {getFieldError(errors, 'bank_account.account_number') && <p className="text-red-500 text-sm mt-1">{getFieldError(errors, 'bank_account.account_number')}</p>}
                         </div>
                         <div>
                             <Label>Country *</Label>
                             <Input required value={data.bank_account.country} onChange={e => setData('bank_account', {...data.bank_account, country: e.target.value})} />
-                            {errors['bank_account.country'] && <p className="text-red-500 text-sm mt-1">{errors['bank_account.country']}</p>}
+                            {getFieldError(errors, 'bank_account.country') && <p className="text-red-500 text-sm mt-1">{getFieldError(errors, 'bank_account.country')}</p>}
                         </div>
                         <div>
                             <Label>IBAN (Optional but recommended)</Label>

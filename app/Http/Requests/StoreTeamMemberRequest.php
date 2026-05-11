@@ -12,7 +12,7 @@ class StoreTeamMemberRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -23,7 +23,16 @@ class StoreTeamMemberRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'full_name' => ['required', 'string', 'max:255'],
+            'type' => ['required', 'in:board,staff'],
+            'position.fr' => ['required', 'string', 'max:255'],
+            'position.en' => ['required', 'string', 'max:255'],
+            'professional_title.fr' => ['nullable', 'string', 'max:255'],
+            'professional_title.en' => ['nullable', 'string', 'max:255'],
+            'role_description.fr' => ['required', 'string'],
+            'role_description.en' => ['required', 'string'],
+            'sort_order' => ['required', 'integer', 'min:0'],
+            'photo' => ['required', 'image', 'mimes:jpeg,png,jpg,webp', 'max:2048'],
         ];
     }
 }

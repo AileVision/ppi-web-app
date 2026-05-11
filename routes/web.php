@@ -114,6 +114,7 @@ use App\Http\Controllers\Public\BeneficiaryController as PublicBeneficiaryContro
 use App\Http\Controllers\Admin\ProjectController as AdminProjectController;
 use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
 use App\Http\Controllers\Admin\BeneficiaryController as AdminBeneficiaryController;
+use App\Http\Controllers\Admin\TeamMemberController as AdminTeamMemberController;
 use App\Http\Controllers\Public\PageController; 
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 
@@ -165,13 +166,13 @@ Route::group([
             
             Route::resource('projects', AdminProjectController::class);
             
+            // CRUD Team Members
+            Route::resource('team', AdminTeamMemberController::class)->except(['show']);
+
             // CRUD Bénéficiaires (Complet)
             Route::resource('beneficiaries', AdminBeneficiaryController::class);
-            // CRUD Catégories (Uniquement Index, Edit et Update pour protéger les 3 catégories obligatoires)
-            Route::resource('categories', AdminCategoryController::class)->only(['index', 'edit', 'update']);
-            
-            // Tu ajouteras les bénéficiaires ici plus tard :
-            // Route::resource('beneficiaries', AdminBeneficiaryController::class);
+            // CRUD Catégories
+            Route::resource('categories', AdminCategoryController::class)->except(['show']);
             
         });
     });

@@ -3,9 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreBeneficiaryRequest;
+use App\Http\Requests\UpdateBeneficiaryRequest;
 use App\Models\Beneficiary;
 use App\Models\Category;
-use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Storage;
 
@@ -33,20 +34,9 @@ class BeneficiaryController extends Controller
         return Inertia::render('admin/beneficiaries/create', ['categories' => $categories]);
     }
 
-    public function store(Request $request)
+    public function store(StoreBeneficiaryRequest $request)
     {
-        $validated = $request->validate([
-            'category_id' => 'required|exists:categories,id',
-            'first_name' => 'required|string|max:255',
-            'age' => 'required|integer|min:0|max:120',
-            'gender' => 'nullable|string',
-            'location' => 'nullable|string',
-            'situation.fr' => 'required|string|max:500', // TdR: description courte (5 à 8 lignes)
-            'situation.en' => 'required|string|max:500',
-            'needs.fr' => 'required|string',
-            'needs.en' => 'required|string',
-            'photo' => 'required|image|mimes:jpeg,png,jpg,webp|max:2048',
-        ]);
+        $validated = $request->validated();
 
         $photoPath = $request->file('photo')->store('beneficiaries', 'public');
 
@@ -82,20 +72,9 @@ class BeneficiaryController extends Controller
         ]);
     }
 
-    public function update(Request $request, Beneficiary $beneficiary)
+    public function update(UpdateBeneficiaryRequest $request, Beneficiary $beneficiary)
     {
-        $validated = $request->validate([
-            'category_id' => 'required|exists:categories,id',
-            'first_name' => 'required|string|max:255',
-            'age' => 'required|integer|min:0|max:120',
-            'gender' => 'nullable|string',
-            'location' => 'nullable|string',
-            'situation.fr' => 'required|string|max:500',
-            'situation.en' => 'required|string|max:500',
-            'needs.fr' => 'required|string',
-            'needs.en' => 'required|string',
-            'photo' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
-        ]);
+        $validated = $request->validated();
 
         if ($request->hasFile('photo')) {
             $photoPath = $request->file('photo')->store('beneficiaries', 'public');

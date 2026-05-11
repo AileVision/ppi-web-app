@@ -3,23 +3,47 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreCategoryRequest;
+use App\Http\Requests\UpdateCategoryRequest;
 use App\Models\Category;
-use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Inertia\Inertia;
 
 class CategoryController extends Controller
 {
     public function index()
     {
-        $categories = Category::with('bankAccount')->get()->map(function ($category) {
+        $categories = Category::with(['bankAccount', 'beneficiaries'])->get()->map(function ($category) {
             return[
                 'id' => $category->id,
                 'name' => $category->getTranslations('name'),
                 'bank_account' => $category->bankAccount,
+                'beneficiaries_count' => $category->beneficiaries->count(),
             ];
         });
 
         return Inertia::render('admin/categories/index',['categories' => $categories]);
+    }
+
+    public function create()
+    {
+        return Inertia::render('admin/categories/create');
+    }
+
+    public function store(StoreCategoryRequest $request)
+    {
+        $validated = $request->validated();
+
+        $category = Category::create([
+            'name' => $validated['name'],
+            'slug' => Str::slug($validated['name']['en'] ?? $validated['name']['fr']),
+        ]);
+
+        if (!empty(array_filter($validated['bank_account'] ?? []))) {
+            $category->bankAccount()->create($validated['bank_account']);
+        }
+
+        return redirect()->route('admin.categories.index')->with('success', 'Category created successfully.');
     }
 
     public function edit(Category $category)
@@ -35,27 +59,30 @@ class CategoryController extends Controller
         ]);
     }
 
-    public function update(Request $request, Category $category)
+    public function update(UpdateCategoryRequest $request, Category $category)
     {
-        $validated = $request->validate([
-            'name.fr' => 'required|string|max:255',
-            'name.en' => 'required|string|max:255',
-            // Infos bancaires de la catégorie
-            'bank_account.account_name' => 'required|string',
-            'bank_account.account_number' => 'required|string',
-            'bank_account.bank_name' => 'required|string',
-            'bank_account.iban' => 'nullable|string',
-            'bank_account.swift' => 'nullable|string',
-            'bank_account.country' => 'required|string',
-        ]);
+        $validated = $request->validated();
 
         $category->update(['name' => $validated['name']]);
         
-        // UpdateOrCreate permet de mettre à jour le compte, ou de le créer s'il manquait
-        $category->bankAccount()->updateOrCreate(['bankable_id' => $category->id, 'bankable_type' => Category::class],
-            $validated['bank_account']
-        );
+        $category->bankAccount()->updateOrCreate([
+            'bankable_id' => $category->id,
+            'bankable_type' => Category::class,
+        ], $validated['bank_account']);
 
         return redirect()->route('admin.categories.index')->with('success', 'Category and Bank info updated!');
+    }
+
+    public function destroy(Category $category)
+    {
+        if ($category->beneficiaries()->exists()) {
+            return redirect()->route('admin.categories.index')
+                ->with('error', 'Unable to delete category while beneficiaries are assigned to it.');
+        }
+
+        $category->bankAccount?->delete();
+        $category->delete();
+
+        return redirect()->route('admin.categories.index')->with('success', 'Category deleted successfully.');
     }
 }

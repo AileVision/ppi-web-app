@@ -12,7 +12,7 @@ class UpdateBeneficiaryRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -23,7 +23,16 @@ class UpdateBeneficiaryRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'category_id' => ['required', 'exists:categories,id'],
+            'first_name' => ['required', 'string', 'max:255'],
+            'age' => ['required', 'integer', 'min:0', 'max:120'],
+            'gender' => ['nullable', 'string'],
+            'location' => ['nullable', 'string'],
+            'situation.fr' => ['required', 'string', 'max:500'],
+            'situation.en' => ['required', 'string', 'max:500'],
+            'needs.fr' => ['required', 'string'],
+            'needs.en' => ['required', 'string'],
+            'photo' => ['nullable', 'image', 'mimes:jpeg,png,jpg,webp', 'max:2048'],
         ];
     }
 }

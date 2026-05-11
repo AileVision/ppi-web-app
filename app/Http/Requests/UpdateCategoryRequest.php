@@ -12,7 +12,7 @@ class UpdateCategoryRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -23,7 +23,14 @@ class UpdateCategoryRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'name.fr' => ['required', 'string', 'max:255'],
+            'name.en' => ['required', 'string', 'max:255'],
+            'bank_account.account_name' => ['required', 'string'],
+            'bank_account.account_number' => ['required', 'string'],
+            'bank_account.bank_name' => ['required', 'string'],
+            'bank_account.iban' => ['nullable', 'string'],
+            'bank_account.swift' => ['nullable', 'string'],
+            'bank_account.country' => ['required', 'string'],
         ];
     }
 }
