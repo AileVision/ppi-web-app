@@ -9,10 +9,13 @@ use App\Models\Project;
 use App\Models\Sector;
 use Inertia\Inertia;
 use Illuminate\Support\Str;
+use App\Traits\OptimizesImages;
 use Illuminate\Support\Facades\Storage;
 
 class ProjectController extends Controller
 {
+    use OptimizesImages;
+
     public function index()
     {
         // Récupérer les projets pour le tableau admin
@@ -47,7 +50,8 @@ class ProjectController extends Controller
         $validated = $request->validated();
 
         // 2. Upload de l'image principale
-        $mainImagePath = $request->file('main_image')->store('projects', 'public');
+        
+        $mainImagePath = $this->uploadAndOptimize($request->file('main_image'), 'projects', 1200);
 
         // 3. Création du projet (Spatie Translatable gère automatiquement les tableaux 'fr' et 'en')
         $project = Project::create([
@@ -66,16 +70,15 @@ class ProjectController extends Controller
         // 5. Créer le compte bancaire
         $project->bankAccount()->create($validated['bank_account']);
 
-        // 6. UPLOAD DE LA GALERIE (Nouveau !)
+        // 6. NOUVELLE METHODE D'UPLOAD POUR LA GALERIE
         if ($request->hasFile('gallery')) {
             foreach ($request->file('gallery') as $index => $image) {
-                // On stocke dans un sous-dossier 'projects/gallery'
-                $galleryPath = $image->store('projects/gallery', 'public');
+                // On compresse les images de la galerie un peu plus petites (ex: 800px)
+                $galleryPath = $this->uploadAndOptimize($image, 'projects/gallery', 800);
                 
-                // On crée l'entrée dans la table project_images via la relation
                 $project->images()->create([
                     'image_path' => '/storage/' . $galleryPath,
-                    'sort_order' => $index, // Pour garder l'ordre d'upload
+                    'sort_order' => $index,
                 ]);
             }
         }
@@ -115,13 +118,19 @@ class ProjectController extends Controller
         $validated = $request->validated();
 
         // Mise à jour de l'image principale SEULEMENT si une nouvelle est fournie
-        if ($request->hasFile('main_image')) {
-            // Optionnel : Supprimer l'ancienne image du serveur
-            $oldPath = str_replace('/storage/', '', $project->main_image_path);
-            Storage::disk('public')->delete($oldPath);
+        // if ($request->hasFile('main_image')) {
+        //     // Optionnel : Supprimer l'ancienne image du serveur
+        //     $oldPath = str_replace('/storage/', '', $project->main_image_path);
+        //     Storage::disk('public')->delete($oldPath);
             
-            $imagePath = $request->file('main_image')->store('projects', 'public');
-            $project->main_image_path = '/storage/' . $imagePath;
+        //     $imagePath = $request->file('main_image')->store('projects', 'public');
+        //     $project->main_image_path = '/storage/' . $imagePath;
+        // }
+
+        if ($request->hasFile('main_image')) {
+            // Suppression de l'ancienne image optionnelle ici
+            $mainImagePath = $this->uploadAndOptimize($request->file('main_image'), 'projects', 1200);
+            $project->main_image_path = '/storage/' . $mainImagePath;
         }
 
         // Mise à jour des textes

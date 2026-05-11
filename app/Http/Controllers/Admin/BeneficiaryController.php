@@ -8,10 +8,13 @@ use App\Http\Requests\UpdateBeneficiaryRequest;
 use App\Models\Beneficiary;
 use App\Models\Category;
 use Inertia\Inertia;
+use App\Traits\OptimizesImages;
 use Illuminate\Support\Facades\Storage;
 
 class BeneficiaryController extends Controller
 {
+    use OptimizesImages;
+
     public function index()
     {
         $beneficiaries = Beneficiary::with('category')->latest()->get()->map(function ($ben) {
@@ -38,7 +41,9 @@ class BeneficiaryController extends Controller
     {
         $validated = $request->validated();
 
-        $photoPath = $request->file('photo')->store('beneficiaries', 'public');
+        // $photoPath = $request->file('photo')->store('beneficiaries', 'public');
+        // UPLOAD OPTIMISÉ (600px max pour les portraits)
+        $photoPath = $this->uploadAndOptimize($request->file('photo'), 'beneficiaries', 600);
 
         Beneficiary::create([
             'category_id' => $validated['category_id'],
@@ -77,7 +82,8 @@ class BeneficiaryController extends Controller
         $validated = $request->validated();
 
         if ($request->hasFile('photo')) {
-            $photoPath = $request->file('photo')->store('beneficiaries', 'public');
+            // UPLOAD OPTIMISÉ (600px max pour les portraits)
+            $photoPath = $this->uploadAndOptimize($request->file('photo'), 'beneficiaries', 600);
             $beneficiary->photo_path = '/storage/' . $photoPath;
         }
 
