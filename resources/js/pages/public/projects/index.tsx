@@ -112,7 +112,7 @@ export default function ProjectsIndex({ projects =[] }: Props) {
                                 <CardFooter className="pt-4 flex flex-col gap-3 sm:flex-row border-t border-slate-50 bg-slate-50/50">
                                     {/* Bouton Voir Détails */}
                                     <Button asChild variant="outline" className="w-full">
-                                        <Link href={route('projects.show', project.slug)}>
+                                        <Link href={route('projects.show', { slug: project.slug })}>
                                             {t('Read more')} <ArrowRight className="ml-2 h-4 w-4" />
                                         </Link>
                                     </Button>

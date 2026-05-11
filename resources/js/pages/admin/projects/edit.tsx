@@ -10,8 +10,10 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
 import { X } from 'lucide-react';
 
-interface CreateProps {
+
+interface EditProps {
     sectors: { id: number, name: Record<string, string> }[];
+    project: any; // On récupère le projet envoyé par le contrôleur
 }
 
 const breadcrumbs =[
@@ -19,28 +21,41 @@ const breadcrumbs =[
     { title: 'Projects', href: '/admin/projects' },
     { title: 'Create', href: '/admin/projects/create' },
 ];
-export default function CreateProject({ sectors }: CreateProps) {
+export default function EditProject({ sectors, project }: EditProps) {
     // État local pour afficher les miniatures de la galerie
     const [galleryPreviews, setGalleryPreviews] = useState<string[]>([]);
 
     // Initialisation du formulaire avec la structure exigée par le Contrôleur
+    // const { data, setData, post, processing, errors } = useForm({
+    //     title: { fr: '', en: '' },
+    //     location: { fr: '', en: '' },
+    //     context: { fr: '', en: '' },
+    //     activities: { fr: '', en: '' },
+    //     expected_results: { fr: '', en: '' },
+    //     sector_ids: [] as number[],
+    //     main_image: null as File | null,
+    //     gallery: [] as File[], // NOUVEAU: Le tableau de fichiers
+    //     bank_account: {
+    //         account_name: '',
+    //         account_number: '',
+    //         bank_name: '',
+    //         iban: '',
+    //         swift: '',
+    //         country: 'Togo'
+    //     }
+    // });
+    
     const { data, setData, post, processing, errors } = useForm({
-        title: { fr: '', en: '' },
-        location: { fr: '', en: '' },
-        context: { fr: '', en: '' },
-        activities: { fr: '', en: '' },
-        expected_results: { fr: '', en: '' },
-        sector_ids: [] as number[],
+        _method: 'put',
+        title: project.title,
+        location: project.location,
+        context: project.context,
+        activities: project.activities,
+        expected_results: project.expected_results,
+        sector_ids: project.sector_ids,
         main_image: null as File | null,
-        gallery: [] as File[], // NOUVEAU: Le tableau de fichiers
-        bank_account: {
-            account_name: '',
-            account_number: '',
-            bank_name: '',
-            iban: '',
-            swift: '',
-            country: 'Togo'
-        }
+        gallery: [] as File[],
+        bank_account: project.bank_account,
     });
 
     // Fonction pour gérer la sélection multiple (max 21)
@@ -77,9 +92,15 @@ export default function CreateProject({ sectors }: CreateProps) {
         return () => galleryPreviews.forEach(url => URL.revokeObjectURL(url));
     }, [galleryPreviews]);
 
+    // const submit = (e: React.FormEvent) => {
+    //     e.preventDefault();
+    //     post(route('admin.projects.store'));
+    // };
+
     const submit = (e: React.FormEvent) => {
         e.preventDefault();
-        post(route('admin.projects.store'));
+        // On POST vers la route UPDATE
+        post(route('admin.projects.update', project.id)); 
     };
 
     // Helper pour mettre à jour les champs bilingues facilement

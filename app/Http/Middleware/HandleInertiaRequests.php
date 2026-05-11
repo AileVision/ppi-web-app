@@ -73,6 +73,10 @@ class HandleInertiaRequests extends Middleware
                 'fr' => LaravelLocalization::getLocalizedURL('fr'),
                 'en' => LaravelLocalization::getLocalizedURL('en'),
             ],
+            'flash' => [
+                'success' => fn () => $request->session()->get('success'),
+                'error' => fn () => $request->session()->get('error'),
+            ],
         ]);
     }
 }

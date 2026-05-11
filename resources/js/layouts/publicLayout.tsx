@@ -24,6 +24,18 @@ export default function PublicLayout({ children }: PropsWithChildren) {
 
                     {/* Navigation Desktop */}
                     <nav className="hidden md:flex space-x-8">
+                        <Link href={route('who-we-are')} className="text-slate-600 hover:text-slate-900">
+                            {t('Who we are')}
+                        </Link>
+                        <Link href={route('what-we-do')} className="text-slate-600 hover:text-slate-900">
+                            {t('What we do')}
+                        </Link>
+                        <Link href={route('transparency')} className="text-slate-600 hover:text-slate-900">
+                            {t('Transparency & Trust')}
+                        </Link>
+                        <Link href={route('contact')} className="text-slate-600 hover:text-slate-900">
+                            {t('Contact us')}
+                        </Link>
                         <Link href={route('projects.index')} className="text-slate-600 hover:text-slate-900">
                             {t('Community Projects')}
                         </Link>

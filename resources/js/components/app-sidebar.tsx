@@ -55,6 +55,34 @@
 //     );
 // }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 import { NavFooter } from '@/components/nav-footer';
 import { NavMain } from '@/components/nav-main';
 import { NavUser } from '@/components/nav-user';
@@ -73,20 +101,20 @@ export function AppSidebar() {
     const mainNavItems: NavItem[] =[
         {
             title: t('Dashboard'),
-            url: 'dashboard',
-            // url: '/admin/dashboard',
+            // url: 'dashboard',
+            url: '/admin/dashboard',
             icon: LayoutGrid,
         },
         {
             title: t('Categories'),
-            url: '/categories',
-            // url: '/admin/categories',
+            // url: '/categories',
+            url: '/admin/categories',
             icon: Tags,
         },
         {
             title: t('Projects'),
-            url: '/projects',
-            // url: '/admin/projects',
+            // url: '/projects',
+            url: '/admin/projects',
             icon: FolderHeart,
         },
         {
@@ -111,9 +139,19 @@ export function AppSidebar() {
 
     const footerNavItems: NavItem[] =[
         // Tu peux laisser les liens de support ou mettre un lien vers le site public
+        // {
+        //     title: t('View Public Site'),
+        //     url: '/',
+        //     icon: BookOpen,
+        // },
         {
-            title: t('View Public Site'),
-            url: '/',
+            title: 'Repository',
+            url: 'https://github.com/laravel/react-starter-kit',
+            icon: Folder,
+        },
+        {
+            title: 'Documentation',
+            url: 'https://laravel.com/docs/starter-kits',
             icon: BookOpen,
         },
     ];
@@ -124,12 +162,13 @@ export function AppSidebar() {
     }
 
     return (
-        <Sidebar collapsible="icon" variant="inset">
+        <Sidebar collapsible="icon" variant="inset" >
             <SidebarHeader>
                 <SidebarMenu>
                     <SidebarMenuItem>
                         <SidebarMenuButton size="lg" asChild>
-                            <Link href="/admin/dashboard" prefetch>
+                            {/* <Link href="/admin/dashboard" prefetch> */}
+                            <Link href="/dashboard" prefetch>
                                 <AppLogo />
                             </Link>
                         </SidebarMenuButton>

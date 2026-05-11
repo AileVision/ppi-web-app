@@ -29,43 +29,13 @@ interface ProjectDetail {
     bank_account: BankAccount;
 }
 
-export default function ProjectShow() {
+interface Props {
+    project: ProjectDetail;
+}
+
+export default function ProjectShow({ project }: Props) {
     const { t, locale } = useLang();
     const[copied, setCopied] = useState(false);
-
-    // DONNÉES FICTIVES (Pour la maquette)
-    const project: ProjectDetail = {
-        id: 1,
-        title: { fr: 'Construction d\'une école primaire', en: 'Primary School Construction' },
-        location: { fr: 'Village de Kpalimé, Togo', en: 'Kpalime Village, Togo' },
-        context: { 
-            fr: "Actuellement, les enfants de ce village parcourent plus de 10 km par jour pour atteindre l'école la plus proche. Les cours sont souvent suspendus pendant la saison des pluies car le bâtiment actuel est fait de paille et de boue.", 
-            en: "Currently, children in this village walk over 10km daily to reach the nearest school. Classes are often suspended during the rainy season as the current building is made of straw and mud." 
-        },
-        activities: {
-            fr: "• Construction de 3 salles de classe en dur\n• Installation de latrines écologiques\n• Équipement en tables-bancs",
-            en: "• Construction of 3 concrete classrooms\n• Installation of ecological latrines\n• Provision of school desks"
-        },
-        expected_results: {
-            fr: "• 150 enfants auront accès à une éducation de qualité\n• Réduction du taux d'abandon scolaire de 40%",
-            en: "• 150 children will have access to quality education\n• 40% reduction in school dropout rates"
-        },
-        main_image_path: 'https://images.unsplash.com/photo-1577896851231-70ef18881754?q=80&w=2070&auto=format&fit=crop',
-        gallery:[
-            'https://images.unsplash.com/photo-1511649475669-e288648b2339?q=80&w=1000&auto=format&fit=crop',
-            'https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?q=80&w=1000&auto=format&fit=crop',
-            'https://images.unsplash.com/photo-1509062522246-3755977927d7?q=80&w=1000&auto=format&fit=crop'
-        ],
-        sectors:[{ name: { fr: 'Éducation', en: 'Education' } }],
-        bank_account: {
-            account_name: "PPI - Projet École Kpalimé",
-            account_number: "00123456789",
-            bank_name: "Ecobank Togo",
-            iban: "TG42 1234 5678 9012 3456 78",
-            swift: "ECOCTGXX",
-            country: "Togo"
-        }
-    };
 
     // Fonction pour copier l'IBAN facilement (très apprécié par les donateurs)
     const copyToClipboard = (text: string) => {

@@ -1,6 +1,6 @@
 import React from 'react';
-import { Head, Link } from '@inertiajs/react';
-import AppLayout from '@/layouts/app-layout'; // Le layout de ton Starter Kit
+import { Head, Link, router } from '@inertiajs/react';
+import AppLayout from '@/layouts/app-layout';
 import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import Heading from '@/components/heading';
@@ -20,6 +20,12 @@ export default function AdminProjectsIndex({ projects }: { projects: ProjectList
         { title: 'Dashboard', href: '/admin/dashboard' },
         { title: 'Projects', href: '/admin/projects' },
     ];
+
+    const handleDelete = (id: number) => {
+        if (confirm(t('Are you sure you want to delete this project?'))) {
+            router.delete(route('admin.projects.destroy', id));
+        }
+    };
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
@@ -65,12 +71,13 @@ export default function AdminProjectsIndex({ projects }: { projects: ProjectList
                                                 <Edit className="h-4 w-4 text-blue-600" />
                                             </Link>
                                         </Button>
-                                        <Button variant="outline" size="icon">
+                                        <Button variant="outline" size="icon" onClick={() => handleDelete(project.id)}>
                                             <Trash2 className="h-4 w-4 text-red-600" />
                                         </Button>
                                     </TableCell>
                                 </TableRow>
-                            ))
+                                )
+                            )
                         )}
                     </TableBody>
                 </Table>

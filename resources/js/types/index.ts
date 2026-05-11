@@ -31,6 +31,10 @@ export interface SharedData {
         fr: string;
         en: string;
     };
+    flash: {
+        success: string | null;
+        error: string | null;
+    };
     [key: string]: unknown;
 }
 
