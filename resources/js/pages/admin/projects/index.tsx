@@ -40,16 +40,17 @@ export default function AdminProjectsIndex({ projects }: { projects: ProjectList
                 </Button>
             </div>
 
-            <div className="bg-white rounded-md border shadow-sm">
-                <Table>
-                    <TableHeader>
-                        <TableRow>
-                            <TableHead>ID</TableHead>
-                            <TableHead>{t('Title')} ({locale.toUpperCase()})</TableHead>
-                            <TableHead>{t('Date')}</TableHead>
-                            <TableHead className="text-right">{t('Actions')}</TableHead>
-                        </TableRow>
-                    </TableHeader>
+            <div className="bg-white rounded-md border shadow-sm overflow-hidden">
+                <div className="overflow-x-auto">
+                    <Table>
+                        <TableHeader>
+                            <TableRow>
+                                <TableHead>ID</TableHead>
+                                <TableHead>{t('Title')} ({locale.toUpperCase()})</TableHead>
+                                <TableHead>{t('Date')}</TableHead>
+                                <TableHead className="text-right">{t('Actions')}</TableHead>
+                            </TableRow>
+                        </TableHeader>
                     <TableBody>
                         {projects.length === 0 ? (
                             <TableRow>

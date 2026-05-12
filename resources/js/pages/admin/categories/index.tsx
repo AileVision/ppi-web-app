@@ -48,16 +48,17 @@ export default function AdminCategoriesIndex({ categories }: { categories: Categ
                 </Button>
             </div>
 
-            <div className="bg-white rounded-md border shadow-sm">
-                <Table>
-                    <TableHeader>
-                        <TableRow>
-                            <TableHead>ID</TableHead>
-                            <TableHead>{t('Category Name')} ({locale.toUpperCase()})</TableHead>
-                            <TableHead>{t('Bank Account Status')}</TableHead>
-                            <TableHead className="text-right">{t('Actions')}</TableHead>
-                        </TableRow>
-                    </TableHeader>
+            <div className="bg-white rounded-md border shadow-sm overflow-hidden">
+                <div className="overflow-x-auto">
+                    <Table>
+                        <TableHeader>
+                            <TableRow>
+                                <TableHead>ID</TableHead>
+                                <TableHead>{t('Category Name')} ({locale.toUpperCase()})</TableHead>
+                                <TableHead>{t('Bank Account Status')}</TableHead>
+                                <TableHead className="text-right">{t('Actions')}</TableHead>
+                            </TableRow>
+                        </TableHeader>
                     <TableBody>
                         {categories.map((category) => (
                             <TableRow key={category.id}>

@@ -46,16 +46,17 @@ export default function AdminBeneficiariesIndex({ beneficiaries }: { beneficiari
             </div>
 
             <div className="bg-white rounded-md border shadow-sm overflow-hidden">
-                <Table>
-                    <TableHeader>
-                        <TableRow>
-                            <TableHead className="w-16">Photo</TableHead>
-                            <TableHead>{t('First Name')}</TableHead>
-                            <TableHead>{t('Age')}</TableHead>
-                            <TableHead>{t('Category')}</TableHead>
-                            <TableHead className="text-right">{t('Actions')}</TableHead>
-                        </TableRow>
-                    </TableHeader>
+                <div className="overflow-x-auto">
+                    <Table>
+                        <TableHeader>
+                            <TableRow>
+                                <TableHead className="w-16">Photo</TableHead>
+                                <TableHead>{t('First Name')}</TableHead>
+                                <TableHead>{t('Age')}</TableHead>
+                                <TableHead>{t('Category')}</TableHead>
+                                <TableHead className="text-right">{t('Actions')}</TableHead>
+                            </TableRow>
+                        </TableHeader>
                     <TableBody>
                         {beneficiaries.length === 0 ? (
                             <TableRow>

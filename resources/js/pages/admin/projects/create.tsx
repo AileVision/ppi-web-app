@@ -176,7 +176,7 @@ export default function CreateProject({ sectors }: CreateProps) {
                         <CardTitle>Sectors & Media</CardTitle>
                     </CardHeader>
                     <CardContent>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
                             
                             {/* COLONNE GAUCHE : SECTEURS */}
                             <div>
@@ -190,7 +190,7 @@ export default function CreateProject({ sectors }: CreateProps) {
                                                 onCheckedChange={(checked) => {
                                                     const newIds = checked 
                                                         ? [...data.sector_ids, sector.id] 
-                                                        : data.sector_ids.filter(id => id !== sector.id);
+                                                        : data.sector_ids.filter((id: number) => id !== sector.id);
                                                     setData('sector_ids', newIds);
                                                 }}
                                             />

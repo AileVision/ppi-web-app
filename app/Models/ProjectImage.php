@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class ProjectImage extends Model
 {
-    protected $fillable = ['project_id', 'image_path'];
+    protected $fillable = ['project_id', 'image_path', 'sort_order'];
 
     public function project()
     {

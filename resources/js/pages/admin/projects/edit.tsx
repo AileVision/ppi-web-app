@@ -20,7 +20,7 @@ interface EditProps {
 const breadcrumbs =[
     { title: 'Dashboard', href: '/admin/dashboard' },
     { title: 'Projects', href: '/admin/projects' },
-    { title: 'Create', href: '/admin/projects/create' },
+    { title: 'Edit', href: '/admin/projects' },
 ];
 export default function EditProject({ sectors, project }: EditProps) {
     // État local pour afficher les miniatures de la galerie
@@ -216,11 +216,11 @@ export default function EditProject({ sectors, project }: EditProps) {
     // );
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title="Create Project" />
+            <Head title="Edit Project" />
             
             <Heading 
-                title="Add New Project" 
-                description="Fill the information in both languages. Fields marked with * are required." 
+                title="Edit Project" 
+                description="Modify the information of this project. Fields marked with * are required." 
             />
 
             <form onSubmit={submit} className="space-y-8 pb-10">
@@ -302,7 +302,7 @@ export default function EditProject({ sectors, project }: EditProps) {
                         <CardTitle>Sectors & Media</CardTitle>
                     </CardHeader>
                     <CardContent>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
                             
                             {/* COLONNE GAUCHE : SECTEURS */}
                             <div>
@@ -316,7 +316,7 @@ export default function EditProject({ sectors, project }: EditProps) {
                                                 onCheckedChange={(checked) => {
                                                     const newIds = checked 
                                                         ? [...data.sector_ids, sector.id] 
-                                                        : data.sector_ids.filter(id => id !== sector.id);
+                                                        : data.sector_ids.filter((id: number) => id !== sector.id);
                                                     setData('sector_ids', newIds);
                                                 }}
                                             />
@@ -333,11 +333,28 @@ export default function EditProject({ sectors, project }: EditProps) {
                             <div className="space-y-6">
                                 {/* Image Principale */}
                                 <div className="bg-slate-50 p-4 rounded-lg border">
-                                    <Label className="text-base font-semibold text-slate-800 mb-2 block">Main Image *</Label>
-                                    <Input type="file" required accept="image/*" onChange={e => setData('main_image', e.target.files?.[0] || null)} />
-                                    <p className="text-xs text-slate-500 mt-2">Format: JPG, PNG, WEBP. Max size: 2MB.</p>
+                                    <Label className="text-base font-semibold text-slate-800 mb-2 block">Main Image</Label>
+                                    <Input type="file" accept="image/*" onChange={e => setData('main_image', e.target.files?.[0] || null)} />
+                                    <p className="text-xs text-slate-500 mt-2">Leave blank to keep the current image. Format: JPG, PNG, WEBP. Max size: 2MB.</p>
                                     {errors.main_image && <p className="text-red-500 text-sm mt-1">{errors.main_image}</p>}
+                                    {project.main_image_path && (
+                                        <div className="mt-3">
+                                            <Label className="text-sm font-semibold mb-2 block">Current Main Image</Label>
+                                            <img src={project.main_image_path} alt="Current main" className="h-32 w-full object-cover rounded-md border" />
+                                        </div>
+                                    )}
                                 </div>
+
+                                {project.existing_gallery && project.existing_gallery.length > 0 && (
+                                    <div className="bg-slate-50 p-4 rounded-lg border">
+                                        <Label className="text-base font-semibold text-slate-800 mb-3 block">Existing Gallery</Label>
+                                        <div className="grid grid-cols-3 sm:grid-cols-4 gap-3">
+                                            {project.existing_gallery.map((image: any) => (
+                                                <img key={image.id} src={image.image_path} alt="Existing gallery" className="h-24 w-full object-cover rounded-md border" />
+                                            ))}
+                                        </div>
+                                    </div>
+                                )}
 
                                 {/* Galerie (Optionnelle, max 21) */}
                                 <div className="bg-slate-50 p-4 rounded-lg border">

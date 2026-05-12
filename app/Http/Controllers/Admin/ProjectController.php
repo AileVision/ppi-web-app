@@ -128,7 +128,11 @@ class ProjectController extends Controller
         // }
 
         if ($request->hasFile('main_image')) {
-            // Suppression de l'ancienne image optionnelle ici
+            // Supprimer l'ancienne image principale si elle existe
+            if ($project->main_image_path) {
+                Storage::disk('public')->delete(ltrim(str_replace('/storage/', '', $project->main_image_path), '/'));
+            }
+
             $mainImagePath = $this->uploadAndOptimize($request->file('main_image'), 'projects', 1200);
             $project->main_image_path = '/storage/' . $mainImagePath;
         }
@@ -145,6 +149,19 @@ class ProjectController extends Controller
         $project->sectors()->sync($validated['sector_ids']);
         $project->bankAccount()->update($validated['bank_account']);
 
+        // Ajouter de nouvelles images de galerie si l'utilisateur en a téléchargé
+        if ($request->hasFile('gallery')) {
+            $startingOrder = $project->images()->count();
+
+            foreach ($request->file('gallery') as $index => $image) {
+                $galleryPath = $this->uploadAndOptimize($image, 'projects/gallery', 800);
+                $project->images()->create([
+                    'image_path' => '/storage/' . $galleryPath,
+                    'sort_order' => $startingOrder + $index,
+                ]);
+            }
+        }
+
         return redirect()->route('admin.projects.index')->with('success', 'Project updated successfully!');
     }
 
@@ -153,7 +170,14 @@ class ProjectController extends Controller
      */
     public function destroy(Project $project)
     {
-        // Supprimer le compte bancaire lié et le projet
+        if ($project->main_image_path) {
+            Storage::disk('public')->delete(ltrim(str_replace('/storage/', '', $project->main_image_path), '/'));
+        }
+
+        foreach ($project->images as $image) {
+            Storage::disk('public')->delete(ltrim(str_replace('/storage/', '', $image->image_path), '/'));
+        }
+
         $project->bankAccount()->delete();
         $project->delete();
 

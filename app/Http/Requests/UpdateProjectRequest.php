@@ -36,6 +36,8 @@ class UpdateProjectRequest extends FormRequest
             'sector_ids' => ['required', 'array'],
             'sector_ids.*' => ['integer', 'exists:sectors,id'],
             'main_image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,webp', 'max:2048'],
+            'gallery' => ['nullable', 'array', 'max:21'],
+            'gallery.*' => ['image', 'mimes:jpeg,png,jpg,webp', 'max:2048'],
             'bank_account.account_name' => ['required', 'string'],
             'bank_account.account_number' => ['required', 'string'],
             'bank_account.bank_name' => ['required', 'string'],

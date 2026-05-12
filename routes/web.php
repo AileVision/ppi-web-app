@@ -164,7 +164,7 @@ Route::group([
         // CRUD accessibles uniquement par l'admin
         Route::middleware(['role:admin'])->group(function () {
             
-            Route::resource('projects', AdminProjectController::class);
+            Route::resource('projects', AdminProjectController::class)->except(['show']);
             
             // CRUD Team Members
             Route::resource('team', AdminTeamMemberController::class)->except(['show']);

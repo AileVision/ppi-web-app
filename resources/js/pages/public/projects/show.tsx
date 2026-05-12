@@ -74,43 +74,43 @@ export default function ProjectShow({ project }: Props) {
                 </div>
             </div>
 
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8 lg:gap-12">
                     
                     {/* COLONNE GAUCHE : Détails du projet */}
-                    <div className="lg:col-span-2 space-y-12">
+                    <div className="lg:col-span-2 space-y-8 md:space-y-12">
                         
                         {/* Image Principale */}
                         <div className="rounded-xl overflow-hidden shadow-md">
-                            <img src={project.main_image_path} alt="Main" className="w-full h-auto object-cover max-h-[500px]" />
+                            <img src={project.main_image_path} alt="Main" className="w-full h-auto object-cover max-h-[400px] sm:max-h-[500px]" />
                         </div>
 
                         {/* Contexte */}
                         <section>
-                            <h2 className="text-2xl font-bold text-slate-900 mb-4">{t('Context & Challenge')}</h2>
-                            <p className="text-slate-600 leading-relaxed text-lg">
+                            <h2 className="text-2xl md:text-3xl font-bold text-slate-900 mb-4">{t('Context & Challenge')}</h2>
+                            <p className="text-slate-600 leading-relaxed text-base md:text-lg">
                                 {project.context[locale] || project.context.en}
                             </p>
                         </section>
 
                         {/* Activités et Résultats */}
-                        <div className="grid md:grid-cols-2 gap-8">
-                            <section className="bg-slate-50 p-6 rounded-xl border border-slate-100">
-                                <h3 className="text-xl font-bold text-slate-900 mb-4 flex items-center">
-                                    <CheckCircle2 className="mr-2 h-5 w-5 text-blue-600" />
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <section className="bg-slate-50 p-5 md:p-6 rounded-xl border border-slate-100">
+                                <h3 className="text-lg md:text-xl font-bold text-slate-900 mb-4 flex items-center">
+                                    <CheckCircle2 className="mr-2 h-5 w-5 text-blue-600 flex-shrink-0" />
                                     {t('Planned Activities')}
                                 </h3>
-                                <div className="text-slate-600 whitespace-pre-line leading-relaxed">
+                                <div className="text-slate-600 whitespace-pre-line leading-relaxed text-sm md:text-base">
                                     {project.activities[locale] || project.activities.en}
                                 </div>
                             </section>
 
-                            <section className="bg-slate-50 p-6 rounded-xl border border-slate-100">
-                                <h3 className="text-xl font-bold text-slate-900 mb-4 flex items-center">
-                                    <CheckCircle2 className="mr-2 h-5 w-5 text-green-600" />
+                            <section className="bg-slate-50 p-5 md:p-6 rounded-xl border border-slate-100">
+                                <h3 className="text-lg md:text-xl font-bold text-slate-900 mb-4 flex items-center">
+                                    <CheckCircle2 className="mr-2 h-5 w-5 text-green-600 flex-shrink-0" />
                                     {t('Expected Results')}
                                 </h3>
-                                <div className="text-slate-600 whitespace-pre-line leading-relaxed">
+                                <div className="text-slate-600 whitespace-pre-line leading-relaxed text-sm md:text-base">
                                     {project.expected_results[locale] || project.expected_results.en}
                                 </div>
                             </section>
@@ -119,8 +119,8 @@ export default function ProjectShow({ project }: Props) {
                         {/* Galerie d'images */}
                         {project.gallery.length > 0 && (
                             <section>
-                                <h2 className="text-2xl font-bold text-slate-900 mb-6">{t('Image Gallery')}</h2>
-                                <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                                <h2 className="text-2xl md:text-3xl font-bold text-slate-900 mb-6">{t('Image Gallery')}</h2>
+                                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 md:gap-4">
                                     {project.gallery.map((img, index) => (
                                         <div key={index} className="aspect-square rounded-lg overflow-hidden bg-slate-200">
                                             <img src={img} alt={`Gallery ${index}`} className="w-full h-full object-cover hover:scale-105 transition-transform duration-300 cursor-pointer" />
@@ -131,21 +131,21 @@ export default function ProjectShow({ project }: Props) {
                         )}
                     </div>
 
-                    {/* COLONNE DROITE : Action & Transparence (Sticky) */}
+                    {/* COLONNE DROITE : Action & Transparence */}
                     <div className="lg:col-span-1">
-                        <div className="sticky top-24 space-y-6">
+                        <div className="lg:sticky lg:top-24 space-y-6">
                             
                             {/* Appel à l'action */}
                             <Card className="border-blue-100 shadow-md">
                                 <CardHeader className="bg-blue-50/50 pb-4">
-                                    <CardTitle className="text-xl">{t('Support this project')}</CardTitle>
-                                    <CardDescription>
+                                    <CardTitle className="text-lg md:text-xl">{t('Support this project')}</CardTitle>
+                                    <CardDescription className="text-sm md:text-base">
                                         {t('Your contribution directly funds the activities of this specific project.')}
                                     </CardDescription>
                                 </CardHeader>
                                 <CardContent className="pt-6">
-                                    <Button className="w-full bg-blue-600 hover:bg-blue-700 h-12 text-lg">
-                                        <Heart className="mr-2 h-5 w-5" /> {t('Donate')}
+                                    <Button className="w-full bg-blue-600 hover:bg-blue-700 h-10 md:h-12 text-base md:text-lg">
+                                        <Heart className="mr-2 h-4 md:h-5 w-4 md:w-5" /> {t('Donate')}
                                     </Button>
                                 </CardContent>
                             </Card>
@@ -153,18 +153,18 @@ export default function ProjectShow({ project }: Props) {
                             {/* EXIGENCE CRITIQUE TdR : Informations Bancaires */}
                             <Card className="border-emerald-100 shadow-sm bg-emerald-50/30">
                                 <CardHeader className="pb-3 border-b border-emerald-100">
-                                    <CardTitle className="text-lg flex items-center text-emerald-800">
-                                        <Landmark className="mr-2 h-5 w-5" />
+                                    <CardTitle className="text-base md:text-lg flex items-center text-emerald-800 gap-2">
+                                        <Landmark className="h-5 w-5 flex-shrink-0" />
                                         {t('Bank Information')}
                                     </CardTitle>
-                                    <CardDescription className="text-emerald-600/80">
+                                    <CardDescription className="text-emerald-600/80 text-xs md:text-sm">
                                         {t('For direct bank transfers. These details are specific to this project.')}
                                     </CardDescription>
                                 </CardHeader>
-                                <CardContent className="pt-4 space-y-3 text-sm text-slate-700">
+                                <CardContent className="pt-4 space-y-3 text-xs md:text-sm text-slate-700">
                                     <div>
                                         <span className="block text-slate-500 text-xs uppercase tracking-wider">{t('Account Name')}</span>
-                                        <span className="font-semibold">{project.bank_account.account_name}</span>
+                                        <span className="font-semibold break-words">{project.bank_account.account_name}</span>
                                     </div>
                                     <div>
                                         <span className="block text-slate-500 text-xs uppercase tracking-wider">{t('Bank')}</span>
@@ -174,11 +174,11 @@ export default function ProjectShow({ project }: Props) {
                                     {project.bank_account.iban && (
                                         <div className="pt-2">
                                             <span className="block text-slate-500 text-xs uppercase tracking-wider">IBAN</span>
-                                            <div className="flex items-center justify-between bg-white px-3 py-2 border border-emerald-200 rounded-md mt-1">
-                                                <code className="text-emerald-800 font-mono text-xs sm:text-sm">{project.bank_account.iban}</code>
+                                            <div className="flex items-center justify-between bg-white px-2 md:px-3 py-2 border border-emerald-200 rounded-md mt-1 gap-1">
+                                                <code className="text-emerald-800 font-mono text-xs md:text-sm break-all">{project.bank_account.iban}</code>
                                                 <button 
                                                     onClick={() => copyToClipboard(project.bank_account.iban!)}
-                                                    className="text-emerald-600 hover:text-emerald-800 p-1"
+                                                    className="text-emerald-600 hover:text-emerald-800 p-1 flex-shrink-0"
                                                     title={t('Copy to clipboard')}
                                                 >
                                                     {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
@@ -190,7 +190,7 @@ export default function ProjectShow({ project }: Props) {
                                     {project.bank_account.swift && (
                                         <div className="pt-1">
                                             <span className="block text-slate-500 text-xs uppercase tracking-wider">SWIFT / BIC</span>
-                                            <span className="font-mono">{project.bank_account.swift}</span>
+                                            <span className="font-mono break-all">{project.bank_account.swift}</span>
                                         </div>
                                     )}
                                 </CardContent>
