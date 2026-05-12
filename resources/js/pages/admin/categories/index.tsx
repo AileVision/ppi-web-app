@@ -93,6 +93,7 @@ export default function AdminCategoriesIndex({ categories }: { categories: Categ
                         ))}
                     </TableBody>
                 </Table>
+                </div>
             </div>
         </AppLayout>
     );
